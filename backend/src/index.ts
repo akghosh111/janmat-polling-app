@@ -1,13 +1,18 @@
-import express from "express";
+import { createServer } from "node:http";
+import { createApplication } from "./app";
 
-const app = express();
-const PORT = process.env.PORT ?? 8000
-app.use(express.json());
+async function main() {
+    try {
+        const server = createServer(createApplication())
+        const PORT: number = 8080
 
-app.get("/health", (req, res) => {
-    res.json({message: "Server is healthy!"})
-});
+        server.listen(PORT, () => {
+            console.log(`HTTP server is running on PORT ${PORT}`)
+        })
+    } catch (error) {
+        console.log(`Error starting http server`)
+        throw error
+    }
+}
 
-app.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`)
-})
+main()
